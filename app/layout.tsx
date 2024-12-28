@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import "./globals.css";
 import { Funnel_Display } from "next/font/google";
 import Provider from "./provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "ProdStation",
@@ -16,10 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
-      <body className={AppFont.className}>
-        <Provider>{children}</Provider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang='en'>
+        <body className={AppFont.className}>
+          <Provider>{children}</Provider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
