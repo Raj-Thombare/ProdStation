@@ -6,7 +6,7 @@ export default [
     image: "/iphone.jpeg",
     user: {
       image: "/user.jpeg",
-      name: "Raj Thombare",
+      name: "Chinmay Patil",
     },
   },
   {
@@ -26,7 +26,7 @@ export default [
     image: "/s24ultra.jpeg",
     user: {
       image: "/user.jpeg",
-      name: "Raj Thombare",
+      name: "Shreyas Chavare",
     },
   },
   {
@@ -36,7 +36,7 @@ export default [
     image: "/zflip.jpeg",
     user: {
       image: "/user.jpeg",
-      name: "Raj Thombare",
+      name: "Nitesh Choudhary",
     },
   },
 ];

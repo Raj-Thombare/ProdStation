@@ -8,3 +8,13 @@ export interface ProductType {
         name: string
     }
 }
+
+export interface ProductData {
+    title: string;
+    category: string;
+    description: string;
+    price: number;
+    about: string;
+    message: string;
+    userEmail: string
+}
