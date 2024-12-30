@@ -44,7 +44,7 @@ const ImageUpload = ({
             />
           ) : (
             <Image
-              src={"/image.png"}
+              src='/image.png'
               alt='image'
               width={70}
               height={70}

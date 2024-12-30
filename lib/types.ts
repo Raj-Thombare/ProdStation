@@ -1,8 +1,8 @@
 export interface ProductType {
     id: number;
-    name: string;
+    title: string;
     price: number;
-    image: string;
+    imageUrl: string;
     user: {
         image: string;
         name: string

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import Products from "../_mockData/Products";
+import products from "../_mockData/products";
 import { ProductType } from "@/lib/types";
 import ProductCardItem from "./ProductCardItem";
 
@@ -12,7 +12,7 @@ const ProductsList = (props: Props) => {
   const [productList, setProductList] = useState<ProductType[]>([]);
 
   useEffect(() => {
-    setProductList(Products);
+    setProductList(products);
   }, []);
   return (
     <div>

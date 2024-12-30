@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/utils/supabase";
 import { db } from "@/config/db";
-import { productsTable } from "@/config/schema";
+import { productsTable, usersTable } from "@/config/schema";
 import { ProductData } from "@/lib/types";
+import { desc, eq, getTableColumns } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
     const formData = await req.formData();
@@ -72,6 +73,24 @@ export async function POST(req: NextRequest) {
     }).returning();
 
     return NextResponse.json(result);
+}
 
+export async function GET(req: NextRequest) {
 
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get('email');
+
+    if (!email) {
+        return NextResponse.json({ error: "Email is required!" }, { status: 400 })
+    }
+
+    const result = await db.select({
+        ...getTableColumns(productsTable),
+        user: {
+            name: usersTable.name,
+            image: usersTable.image
+        }
+    }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).where(eq(productsTable.createdBy, email)).orderBy(desc(productsTable.id));
+
+    return NextResponse.json({ result })
 }

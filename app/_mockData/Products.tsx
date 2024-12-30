@@ -1,9 +1,9 @@
 export default [
   {
     id: 1,
-    name: "Iphone 15",
+    title: "Iphone 15",
     price: 70000,
-    image: "/iphone.jpeg",
+    imageUrl: "/iphone.jpeg",
     user: {
       image: "/user.jpeg",
       name: "Chinmay Patil",
@@ -11,9 +11,9 @@ export default [
   },
   {
     id: 2,
-    name: "Z Fold 6",
+    title: "Z Fold 6",
     price: 160000,
-    image: "/zfold.jpeg",
+    imageUrl: "/zfold.jpeg",
     user: {
       image: "/user.jpeg",
       name: "Raj Thombare",
@@ -21,9 +21,9 @@ export default [
   },
   {
     id: 3,
-    name: "Samsung S24 Ultra",
+    title: "Samsung S24 Ultra",
     price: 125000,
-    image: "/s24ultra.jpeg",
+    imageUrl: "/s24ultra.jpeg",
     user: {
       image: "/user.jpeg",
       name: "Shreyas Chavare",
@@ -31,9 +31,9 @@ export default [
   },
   {
     id: 4,
-    name: "Z Flip 6",
+    title: "Z Flip 6",
     price: 50000,
-    image: "/zflip.jpeg",
+    imageUrl: "/zflip.jpeg",
     user: {
       image: "/user.jpeg",
       name: "Nitesh Choudhary",
