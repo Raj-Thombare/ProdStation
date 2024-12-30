@@ -45,7 +45,7 @@ const ProductCardItem = ({ product, editable = false }: Props) => {
               </Button>
             ) : (
               <ProductEditableOption>
-                <MoreVerticalIcon />
+                <MoreVerticalIcon className='cursor-pointer' />
               </ProductEditableOption>
             )}
           </div>

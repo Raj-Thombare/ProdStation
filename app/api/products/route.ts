@@ -7,7 +7,7 @@ import { desc, eq, getTableColumns } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
     const formData = await req.formData();
-
+    console.log(formData)
     const image = formData.get('image');
     const file = formData.get('file');
     const dataString = formData.get('data');
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     }
 
     const imageName = `${Date.now()}-${image.name}`;
-    const fileName = `${Date.now()}-${file.name}`;
+    // const fileName = file ? `${Date.now()}-${file.name}` : "";
 
     const { error: imageUploadError } = await supabase.storage
         .from("prodstation")
@@ -44,21 +44,42 @@ export async function POST(req: NextRequest) {
             contentType: image.type,
         });
 
-    const { error: fileUploadError } = await supabase.storage
-        .from("prodstation")
-        .upload(fileName, file, {
-            contentType: file.type,
-        });
+    // if (file) {
+    //     await supabase.storage
+    //     .from("prodstation")
+    //     .upload(fileName, file, {
+    //         contentType: file.type,
+    //     });
+    // }
 
-    if (imageUploadError || fileUploadError) {
-        return NextResponse.json({ error: imageUploadError?.message || fileUploadError?.message }, { status: 500 });
+    if (imageUploadError) {
+        return NextResponse.json({ error: imageUploadError?.message }, { status: 500 });
     }
 
     const { data: imageData } = supabase.storage.from("prodstation").getPublicUrl(imageName);
-    const { data: fileData } = supabase.storage.from("prodstation").getPublicUrl(fileName);
+    // const { data: fileData } = supabase.storage.from("prodstation").getPublicUrl(fileName);
 
     const imageUrl = imageData.publicUrl;
-    const fileUrl = fileData.publicUrl;
+    // const fileUrl = fileData.publicUrl;
+
+    let fileName = "";
+    let fileUrl = "";
+
+    if (file && file instanceof File && file.size > 0) {
+        fileName = `${Date.now()}-${file.name}`;
+        const { error: fileUploadError } = await supabase.storage
+            .from("prodstation")
+            .upload(fileName, file, {
+                contentType: file.type,
+            });
+
+        if (fileUploadError) {
+            return NextResponse.json({ error: fileUploadError?.message }, { status: 500 });
+        }
+
+        const { data: fileData } = supabase.storage.from("prodstation").getPublicUrl(fileName);
+        fileUrl = fileData.publicUrl;
+    }
 
     const result = await db.insert(productsTable).values({
         title: data.title,
@@ -79,9 +100,18 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const email = searchParams.get('email');
+    const limit = searchParams.get('limit');
 
-    if (!email) {
-        return NextResponse.json({ error: "Email is required!" }, { status: 400 })
+    if (email) {
+        const result = await db.select({
+            ...getTableColumns(productsTable),
+            user: {
+                name: usersTable.name,
+                image: usersTable.image
+            }
+        }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).where(eq(productsTable.createdBy, email)).orderBy(desc(productsTable.id));
+
+        return NextResponse.json({ result })
     }
 
     const result = await db.select({
@@ -90,7 +120,8 @@ export async function GET(req: NextRequest) {
             name: usersTable.name,
             image: usersTable.image
         }
-    }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).where(eq(productsTable.createdBy, email)).orderBy(desc(productsTable.id));
+    }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).orderBy(desc(productsTable.id)).limit(9);
 
     return NextResponse.json({ result })
+
 }

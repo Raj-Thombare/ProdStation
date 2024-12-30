@@ -15,7 +15,7 @@ export const productsTable = pgTable("products", {
     about: text(),
     category: varchar().notNull(),
     imageUrl: varchar().notNull(),
-    fileUrl: varchar().notNull(),
+    fileUrl: varchar(),
     message: varchar(),
     createdBy: varchar('createdBy').notNull().references(() => usersTable.email)
 })

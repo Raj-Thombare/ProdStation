@@ -21,7 +21,7 @@ import { Loader2Icon } from "lucide-react";
 
 type FormDataType = {
   image: string | File;
-  file: File;
+  file: File | string;
   message: string;
   data: ProductData;
 };
