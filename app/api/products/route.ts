@@ -7,7 +7,6 @@ import { desc, eq, getTableColumns } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
     const formData = await req.formData();
-    console.log(formData)
     const image = formData.get('image');
     const file = formData.get('file');
     const dataString = formData.get('data');
@@ -36,7 +35,6 @@ export async function POST(req: NextRequest) {
     }
 
     const imageName = `${Date.now()}-${image.name}`;
-    // const fileName = file ? `${Date.now()}-${file.name}` : "";
 
     const { error: imageUploadError } = await supabase.storage
         .from("prodstation")
@@ -44,23 +42,13 @@ export async function POST(req: NextRequest) {
             contentType: image.type,
         });
 
-    // if (file) {
-    //     await supabase.storage
-    //     .from("prodstation")
-    //     .upload(fileName, file, {
-    //         contentType: file.type,
-    //     });
-    // }
-
     if (imageUploadError) {
         return NextResponse.json({ error: imageUploadError?.message }, { status: 500 });
     }
 
     const { data: imageData } = supabase.storage.from("prodstation").getPublicUrl(imageName);
-    // const { data: fileData } = supabase.storage.from("prodstation").getPublicUrl(fileName);
 
     const imageUrl = imageData.publicUrl;
-    // const fileUrl = fileData.publicUrl;
 
     let fileName = "";
     let fileUrl = "";
@@ -120,8 +108,7 @@ export async function GET(req: NextRequest) {
             name: usersTable.name,
             image: usersTable.image
         }
-    }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).orderBy(desc(productsTable.id)).limit(9);
+    }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).orderBy(desc(productsTable.id)).limit(Number(limit));
 
     return NextResponse.json({ result })
-
 }

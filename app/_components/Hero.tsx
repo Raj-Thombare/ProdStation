@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Hero = () => {
   return (
-    <div className='bg-green-700 p-10 px-28 lg:px-36'>
+    <div className='bg-green-700 p-10 md:px-28 lg:px-36'>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-10 pt-20'>
         <div>
           <h2 className='font-extrabold text-5xl text-white'>
@@ -16,9 +16,13 @@ const Hero = () => {
             and discovering opportunities every day
           </p>
           <div className='flex gap-5 mt-8'>
-            <Button>Explore</Button>
+            <Link href={"/explore"}>
+              <Button size='lg'>Explore</Button>
+            </Link>
             <Link href={"/dashboard"}>
-              <Button className='bg-red-500'>Sell</Button>
+              <Button size='lg' className='bg-red-500'>
+                Sell
+              </Button>
             </Link>
           </div>
         </div>

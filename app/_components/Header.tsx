@@ -26,7 +26,7 @@ const Header = () => {
           ProdStation
         </h2>
       </Link>
-      <ul className='flex gap-5'>
+      <ul className=' gap-5 hidden md:flex'>
         {MenuList.map((menu, idx) => {
           return (
             <li

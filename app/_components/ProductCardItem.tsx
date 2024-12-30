@@ -15,16 +15,17 @@ type Props = {
 const ProductCardItem = ({ product, editable = false }: Props) => {
   return (
     <div>
-      <Card className='p-3'>
+      <Card className='p-2 md:p-3 rounded-sm'>
         <Image
           src={product.imageUrl}
           alt={product.title}
           width={400}
           height={300}
+          className='h-[200px] object-contain'
           priority
         />
-        <div>
-          <h2 className='font-bold text-xl'>{product?.title}</h2>
+        <div className='mt-2'>
+          <h2 className='font-bold text-xl line-clamp-1'>{product?.title}</h2>
           <h2 className='font-bold text-2xl text-yellow-500'>
             Rs. {product?.price}
           </h2>

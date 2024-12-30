@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ProductType } from "@/lib/types";
 import ProductCardItem from "./ProductCardItem";
 import axios from "axios";
+import Link from "next/link";
+import DisplayProductList from "./DisplayProductList";
 
 type Props = {};
 
@@ -27,24 +29,15 @@ const ProductsList = (props: Props) => {
 
   return (
     <div>
-      <h2 className='font-bold text-lg flex justify-between items-center'>
+      <h2 className='font-bold text-2xl flex justify-between items-center'>
         Featured
         <span>
-          <Button>View All</Button>
+          <Link href='/explore'>
+            <Button>View All</Button>
+          </Link>
         </span>
       </h2>
-
-      <div className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mt-5'>
-        {productList.length > 0
-          ? productList.map((product, idx) => {
-              return <ProductCardItem key={idx} product={product} />;
-            })
-          : [...Array(9)].map((_, idx) => (
-              <div
-                key={idx}
-                className='w-full h-[250px] bg-slate-200 rounded-lg animate-pulse'></div>
-            ))}
-      </div>
+      <DisplayProductList products={productList} />
     </div>
   );
 };
