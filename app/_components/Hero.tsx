@@ -33,6 +33,7 @@ const Hero = () => {
             width={300}
             height={300}
             className='scale-x-[-1]'
+            priority
           />
         </div>
       </div>

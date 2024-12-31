@@ -1,20 +1,21 @@
 import { Card } from "@/components/ui/card";
-import { ProductType } from "@/lib/types";
+import { ProductCardProps } from "@/lib/types";
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MoreVerticalIcon } from "lucide-react";
 import ProductEditableOption from "./ProductEditableOption";
+import Link from "next/link";
 
 type Props = {
-  product: ProductType;
+  product: ProductCardProps;
   key: number;
   editable?: boolean;
 };
 
 const ProductCardItem = ({ product, editable = false }: Props) => {
   return (
-    <div>
+    <Link href={`/explore/${product?.id}`}>
       <Card className='p-2 md:p-3 rounded-sm'>
         <Image
           src={product.imageUrl}
@@ -52,7 +53,7 @@ const ProductCardItem = ({ product, editable = false }: Props) => {
           </div>
         </div>
       </Card>
-    </div>
+    </Link>
   );
 };
 

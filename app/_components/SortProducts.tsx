@@ -44,7 +44,10 @@ const SortProducts = ({ onSortChange }: Props) => {
         <SelectContent>
           {list.map((option, idx) => {
             return (
-              <SelectItem key={idx} value={JSON.stringify(option)}>
+              <SelectItem
+                key={idx}
+                className='cursor-pointer'
+                value={JSON.stringify(option)}>
                 {option.label}
               </SelectItem>
             );

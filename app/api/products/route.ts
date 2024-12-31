@@ -89,6 +89,20 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get('email');
     const limit = searchParams.get('limit');
+    const id = searchParams.get('id');
+    const category = searchParams.get('category');
+
+    if (category) {
+        const result = await db.select({
+            ...getTableColumns(productsTable),
+            user: {
+                name: usersTable.name,
+                image: usersTable.image
+            }
+        }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).where(eq(productsTable.category, category)).orderBy(desc(productsTable.id));
+
+        return NextResponse.json({ result })
+    }
 
     if (email) {
         const result = await db.select({
@@ -102,13 +116,31 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ result })
     }
 
+    if (id) {
+        const result = await db.select({
+            ...getTableColumns(productsTable),
+            user: {
+                name: usersTable.name,
+                image: usersTable.image
+            }
+        }).from(productsTable)
+            .innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email))
+            .where(eq(productsTable.id, Number(id)))
+            .orderBy(desc(productsTable.id))
+
+        return NextResponse.json(result[0])
+    }
+
     const result = await db.select({
         ...getTableColumns(productsTable),
         user: {
             name: usersTable.name,
             image: usersTable.image
         }
-    }).from(productsTable).innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email)).orderBy(desc(productsTable.id)).limit(Number(limit));
+    }).from(productsTable)
+        .innerJoin(usersTable, eq(productsTable.createdBy, usersTable.email))
+        .orderBy(desc(productsTable.id))
+        .limit(Number(limit));
 
     return NextResponse.json({ result })
 }

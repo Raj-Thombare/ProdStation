@@ -1,12 +1,12 @@
 import React from "react";
 import ProductCardItem from "./ProductCardItem";
-import { ProductType } from "@/lib/types";
+import { ProductCardProps } from "@/lib/types";
 
-const DisplayProductList = ({ products }: { products: ProductType[] }) => {
+const DisplayProductList = ({ products }: { products: ProductCardProps[] }) => {
   return (
     <div className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mt-5'>
       {products.length > 0
-        ? products.map((product: ProductType, idx: number) => {
+        ? products.map((product: ProductCardProps, idx: number) => {
             return <ProductCardItem key={idx} product={product} />;
           })
         : [...Array(6)].map((_, idx) => (
