@@ -15,7 +15,7 @@ export interface ProductDetailsType {
     }
 }
 
-export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user'>
+export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user' | 'category'>
 
 export interface AddProductType {
     title: string;

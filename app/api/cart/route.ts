@@ -24,14 +24,22 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Email is required!' }, { status: 400 })
     }
 
-    const result = await db.select({
-        ...getTableColumns(productsTable),
-        ...getTableColumns(cartTable)
-    }).from(cartTable)
-        .where(eq(cartTable.email, email))
-        .innerJoin(productsTable, eq(cartTable.productId, productsTable.id))
+    try {
+        const result = await db.select({
+            ...getTableColumns(productsTable),
+            ...getTableColumns(cartTable)
+        }).from(cartTable)
+            .where(eq(cartTable.email, email))
+            .innerJoin(productsTable, eq(cartTable.productId, productsTable.id))
 
-    return NextResponse.json(result)
+        return NextResponse.json(result)
+    } catch (error) {
+        console.error("Error adding cart item:", error);
+        return NextResponse.json(
+            { error: "Failed to add item. Please try again later." },
+            { status: 500 }
+        );
+    }
 }
 
 export async function DELETE(req: NextRequest) {
@@ -39,11 +47,22 @@ export async function DELETE(req: NextRequest) {
     const recordId = searchParams.get('recordId');
 
     if (!recordId) {
-        return NextResponse.json({ error: 'Id is required!' }, { status: 400 })
+        return NextResponse.json({ error: 'Id is required!' }, { status: 400 });
     }
 
-    await db.delete(cartTable)
-        .where(eq(cartTable.id, Number(recordId)));
+    try {
+        const deleteResult = await db.delete(cartTable).where(eq(cartTable.id, Number(recordId)));
 
-    return NextResponse.json({ response: "Item Removed" })
+        if (deleteResult.rowCount === 0) {
+            return NextResponse.json({ error: "Item not found!" }, { status: 404 });
+        }
+
+        return NextResponse.json({ response: "Item Removed" });
+    } catch (error) {
+        console.error("Error deleting cart item:", error);
+        return NextResponse.json(
+            { error: "Failed to remove item. Please try again later." },
+            { status: 500 }
+        );
+    }
 }

@@ -14,6 +14,7 @@ import { toast } from "sonner";
 
 interface CartContextType {
   cart: ProductType[];
+  totalAmount: number;
   setCart: Dispatch<SetStateAction<ProductType[]>>;
   addToCart: (product: ProductType) => void;
   removeFromCart: (product: ProductType) => void;
@@ -21,6 +22,7 @@ interface CartContextType {
 
 export const CartContext = createContext<CartContextType>({
   cart: [],
+  totalAmount: 0,
   setCart: () => {},
   addToCart: () => {},
   removeFromCart: () => {},
@@ -35,32 +37,55 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
     user && getCartItems();
   }, [user]);
 
+  const calculateTotalAmount = () => {
+    return cart.reduce((total, item) => total + item.price, 0);
+  };
+
+  const totalAmount = calculateTotalAmount();
+
   const getCartItems = async () => {
     const result = await axios.get(
       `/api/cart?email=${user?.primaryEmailAddress?.emailAddress}`
     );
     setCart(result.data);
   };
-
   const addToCart = async (product: ProductType) => {
-    await axios.post(`/api/cart`, {
-      productId: product?.id,
-      email: user?.primaryEmailAddress?.emailAddress,
-    });
+    try {
+      const response = await axios.post(`/api/cart`, {
+        productId: product?.id,
+        email: user?.primaryEmailAddress?.emailAddress,
+      });
 
-    setCart((cart) => [...cart, product]);
-    toast("Added to cart");
+      if (response.status === 200 || response.status === 201) {
+        setCart((prevCart) => [...prevCart, product]);
+        toast.success("Item added to cart");
+      } else {
+        throw new Error("Failed to add item to cart");
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+      toast.error("Failed to add item. Please try again.");
+    }
   };
 
   const removeFromCart = async (product: ProductType) => {
-    const updatedCart = cart.filter((item) => item.id !== product.id);
-    setCart(updatedCart);
-    await axios.delete(`/api/cart?recordId=${product?.id}`);
-    toast("Item Removed");
+    const previousCart = [...cart];
+    setCart((prevCart) => prevCart.filter((item) => item.id !== product.id));
+
+    try {
+      const response = await axios.delete(`/api/cart?recordId=${product?.id}`);
+      if (response.status !== 200) throw new Error("Failed to remove item");
+      toast.success("Item removed from cart");
+    } catch (error) {
+      console.error("Error removing item:", error);
+      setCart(previousCart);
+      toast.error("Failed to remove item. Please try again.");
+    }
   };
 
   return (
-    <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cart, setCart, addToCart, removeFromCart, totalAmount }}>
       {children}
     </CartContext.Provider>
   );

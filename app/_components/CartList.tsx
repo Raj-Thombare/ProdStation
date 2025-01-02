@@ -11,19 +11,11 @@ import { useCart } from "../_context/CartContext";
 import CartProductItem from "./CartProductItem";
 import { Button } from "@/components/ui/button";
 import { formatCurrencyINR } from "@/utils";
+import Link from "next/link";
 
 const CartList = ({ children }: { children: ReactNode }) => {
-  const { cart } = useCart();
+  const { cart, totalAmount } = useCart();
 
-  const calculateTotal = () => {
-    let total = 0;
-    cart.forEach((item) => {
-      total = total + Number(item.price);
-    });
-    return total;
-  };
-
-  const amount = calculateTotal();
   return (
     <Sheet>
       <SheetTrigger>{children}</SheetTrigger>
@@ -48,11 +40,13 @@ const CartList = ({ children }: { children: ReactNode }) => {
               )}
               <div>
                 <h2 className='font-bold text-2xl flex justify-between mt-10'>
-                  Total: <span> {formatCurrencyINR(amount)}</span>
+                  Total: <span> {formatCurrencyINR(totalAmount)}</span>
                 </h2>
-                <Button className='w-full mt-3' disabled={cart.length == 0!!}>
-                  CHECKOUT
-                </Button>
+                <Link href='/checkout'>
+                  <Button className='w-full mt-3' disabled={cart.length == 0!!}>
+                    CHECKOUT
+                  </Button>
+                </Link>
               </div>
             </div>
           </SheetDescription>
