@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ProductCardProps } from "@/lib/types";
+import { ProductType } from "@/lib/types";
 import axios from "axios";
 import Link from "next/link";
 import DisplayProductList from "./DisplayProductList";
@@ -10,7 +10,7 @@ import DisplayProductList from "./DisplayProductList";
 type Props = {};
 
 const ProductsList = (props: Props) => {
-  const [productList, setProductList] = useState<ProductCardProps[]>([]);
+  const [productList, setProductList] = useState<ProductType[]>([]);
 
   useEffect(() => {
     getProductList();

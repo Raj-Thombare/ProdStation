@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Header from "./_components/Header";
 import { useUser } from "@clerk/nextjs";
+import { CartContextProvider } from "./_context/CartContext";
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUser();
@@ -19,10 +20,12 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div>
-      <Header />
-      <div>{children}</div>
-    </div>
+    <>
+      <CartContextProvider>
+        <Header />
+        <div>{children}</div>
+      </CartContextProvider>
+    </>
   );
 };
 

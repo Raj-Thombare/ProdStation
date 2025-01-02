@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/utils/supabase";
 import { db } from "@/config/db";
 import { productsTable, usersTable } from "@/config/schema";
-import { ProductData } from "@/lib/types";
+import { AddProductType } from "@/lib/types";
 import { desc, eq, getTableColumns } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
@@ -15,9 +15,9 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Missing or invalid product data" }, { status: 400 });
     }
 
-    let data: ProductData;
+    let data: AddProductType;
     try {
-        data = JSON.parse(dataString) as ProductData;
+        data = JSON.parse(dataString) as AddProductType;
     } catch (error) {
         return NextResponse.json({ error: "Invalid JSON format for product data" }, { status: 400 });
     }

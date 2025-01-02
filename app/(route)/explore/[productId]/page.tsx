@@ -15,12 +15,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import SimilarProducts from "./_components/SimilarProducts";
+import { formatCurrencyINR } from "@/utils";
+import { useCart } from "@/app/_context/CartContext";
 
 type Props = {};
 
 const page = (props: Props) => {
   const { productId } = useParams();
   const [product, setProduct] = useState<ProductDetailsType>();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     getProductDetails();
@@ -53,13 +56,16 @@ const page = (props: Props) => {
               <Badge className='text-black'>{product?.category}</Badge>
             </div>
             <h2 className='font-bold text-3xl text-yellow-600'>
-              Rs. {product.price}
+              {formatCurrencyINR(product.price)}
             </h2>
             <p className='text-gray-500'>
               The {product.category} will send to your registered email address
               once you purchase this digital content
             </p>
-            <Button className='w-full' size='lg'>
+            <Button
+              className='w-full'
+              size='lg'
+              onClick={() => addToCart(product)}>
               Add to cart
             </Button>
             <div>

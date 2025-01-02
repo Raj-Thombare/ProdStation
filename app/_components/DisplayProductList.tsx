@@ -1,12 +1,13 @@
 import React from "react";
 import ProductCardItem from "./ProductCardItem";
-import { ProductCardProps } from "@/lib/types";
+import { ProductType } from "@/lib/types";
+import { useUser } from "@clerk/nextjs";
 
-const DisplayProductList = ({ products }: { products: ProductCardProps[] }) => {
+const DisplayProductList = ({ products }: { products: ProductType[] }) => {
   return (
     <div className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mt-5'>
       {products.length > 0
-        ? products.map((product: ProductCardProps, idx: number) => {
+        ? products.map((product: ProductType, idx: number) => {
             return <ProductCardItem key={idx} product={product} />;
           })
         : [...Array(6)].map((_, idx) => (

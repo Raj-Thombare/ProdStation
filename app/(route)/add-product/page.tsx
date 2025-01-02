@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import ImageUpload from "./_components/ImageUpload";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
-import { ProductData } from "@/lib/types";
+import { AddProductType } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2Icon } from "lucide-react";
@@ -23,7 +23,7 @@ type FormDataType = {
   image: string | File;
   file: File | string;
   message: string;
-  data: ProductData;
+  data: AddProductType;
 };
 
 const AddProduct = () => {
