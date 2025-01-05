@@ -29,7 +29,7 @@ const Header = () => {
     <div className='flex justify-between items-center p-4 px-10 md:px-32 lg:px-48 bg-primary border-b-2 border-black'>
       <Link href='/'>
         <h2 className='font-bold text-xl bg-black text-primary px-2 p-1 rounded-sm border'>
-          ProdStation
+          PRODSTATION
         </h2>
       </Link>
       <ul className=' gap-5 hidden md:flex'>

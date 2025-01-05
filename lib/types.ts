@@ -9,13 +9,17 @@ export interface ProductDetailsType {
     description: string;
     imageUrl: string;
     message: string;
-    user: {
-        image: string;
-        name: string
-    }
+    user: User;
+    productId: number;
+    email: any;
 }
 
-export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user' | 'category'>
+export interface User {
+    image: string;
+    name: string
+}
+
+export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user' | 'category' | 'productId' | 'email'>
 
 export interface AddProductType {
     title: string;
@@ -25,4 +29,20 @@ export interface AddProductType {
     about: string;
     message: string;
     userEmail: string
+}
+
+export interface OrderType {
+    id: number,
+    title: string,
+    price: number,
+    description?: string,
+    about?: string,
+    category: string,
+    imageUrl: string,
+    fileUrl?: string,
+    message?: string,
+    createdBy: string,
+    email: any,
+    productId: number,
+    amount: number;
 }
