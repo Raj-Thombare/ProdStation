@@ -34,44 +34,40 @@ const page = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const createOrder = async () => {
+    const response = await axios.post("/api/order", { amount: totalAmount });
+    return response.data.orderId;
+  };
+
   const handlePayment = async () => {
     setLoading(true);
     setIsProcessing(true);
 
     try {
-      const result: OrderType = await axios.post("/api/order", {
-        orderDetail: cart,
-        email: user?.primaryEmailAddress?.emailAddress,
-        amount: totalAmount,
-      });
+      const orderId = await createOrder();
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: totalAmount * 100,
         Currency: "INR",
         name: "ProdStation",
-        order_id: result.data.orderId,
+        order_id: orderId,
         handler: async function (response: any) {
-          try {
-            const verificationResult = await axios.post("/api/payment-verify", {
-              paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id,
-              signature: response.razorpay_signature,
-              orderDetail: cart,
-              email: user?.primaryEmailAddress?.emailAddress,
-            });
+          const verificationResult = await axios.post("/api/order", {
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            orderDetail: cart,
+            email: user?.primaryEmailAddress?.emailAddress,
+            validateTxs: true,
+          });
 
-            if (verificationResult.data.success) {
-              setCart([]);
-              toast("Order created successfully!");
-              router.replace("/dashboard");
-            } else {
-              toast.error("Payment verification failed.");
-            }
-          } catch (verificationError) {
-            toast.error("Payment verification failed. Please contact support.");
-            setLoading(false);
-            setIsProcessing(false);
+          if (verificationResult.data.success) {
+            setCart([]);
+            toast("Order created successfully!");
+            router.replace("/dashboard");
+          } else {
+            toast.error("Payment verification failed.");
           }
         },
         modal: {
@@ -94,10 +90,10 @@ const page = () => {
       const rzp1 = new window.Razorpay(options);
       rzp1.open();
     } catch (error) {
-      toast.error("Failed to create order. Please try again.");
-      setLoading(false);
-      setIsProcessing(false);
+      toast.error("Error processing payment.");
     }
+    setLoading(false);
+    setIsProcessing(false);
   };
 
   return (
