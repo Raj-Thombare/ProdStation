@@ -13,9 +13,10 @@ type Props = {
   product: ProductType;
   key: number;
   editable?: boolean;
+  purchase?: boolean;
 };
 
-const ProductCardItem = ({ product, editable = false }: Props) => {
+const ProductCardItem = ({ product, editable = false, purchase }: Props) => {
   const { addToCart } = useCart();
 
   return (
@@ -35,30 +36,42 @@ const ProductCardItem = ({ product, editable = false }: Props) => {
             {formatCurrencyINR(product?.price)}
           </h2>
           <div className='mt-3 md:flex justify-between items-center'>
-            <div className='flex gap-2 items-center'>
-              <Image
-                src={product?.user?.image || "/user.jpeg"}
-                alt='product'
-                height={20}
-                width={20}
-                className='rounded-full'
-              />
-              <h2 className='text-sm text-gray-400'>{product?.user?.name}</h2>
-            </div>
-            {!editable ? (
-              <Button
-                size='sm'
-                className='mt-2'
-                onClick={(e) => {
-                  e.preventDefault();
-                  addToCart(product);
-                }}>
-                Add to Cart
+            {!purchase && (
+              <>
+                <div className='flex gap-2 items-center'>
+                  <Image
+                    src={product?.user?.image || "/user.jpeg"}
+                    alt='product'
+                    height={20}
+                    width={20}
+                    className='rounded-full'
+                  />
+                  <h2 className='text-sm text-gray-400'>
+                    {product?.user?.name}
+                  </h2>
+                </div>
+
+                {!editable ? (
+                  <Button
+                    size='sm'
+                    className='mt-2'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      addToCart(product);
+                    }}>
+                    Add to Cart
+                  </Button>
+                ) : (
+                  <ProductEditableOption>
+                    <MoreVerticalIcon className='cursor-pointer' />
+                  </ProductEditableOption>
+                )}
+              </>
+            )}
+            {purchase && (
+              <Button className='w-full bg-green-700 hover:bg-green-600 text-white'>
+                Download Invoice
               </Button>
-            ) : (
-              <ProductEditableOption>
-                <MoreVerticalIcon className='cursor-pointer' />
-              </ProductEditableOption>
             )}
           </div>
         </div>

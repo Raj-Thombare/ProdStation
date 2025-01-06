@@ -19,7 +19,7 @@ export interface User {
     name: string
 }
 
-export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user' | 'category' | 'productId' | 'email'>
+export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user' | 'category' | 'productId' | 'email' | 'description' | 'purchase'>
 
 export interface AddProductType {
     title: string;

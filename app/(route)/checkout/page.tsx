@@ -20,12 +20,6 @@ declare global {
   }
 }
 
-interface OrderType {
-  data: {
-    orderId: string;
-  };
-}
-
 const page = () => {
   const { cart, setCart, totalAmount } = useCart();
   const { user } = useUser();
@@ -53,21 +47,25 @@ const page = () => {
         name: "ProdStation",
         order_id: orderId,
         handler: async function (response: any) {
-          const verificationResult = await axios.post("/api/order", {
-            paymentId: response.razorpay_payment_id,
-            orderId: response.razorpay_order_id,
-            signature: response.razorpay_signature,
-            orderDetail: cart,
-            email: user?.primaryEmailAddress?.emailAddress,
-            validateTxs: true,
-          });
+          try {
+            const verificationResult = await axios.post("/api/order", {
+              paymentId: response.razorpay_payment_id,
+              orderId: response.razorpay_order_id,
+              signature: response.razorpay_signature,
+              orderDetail: cart,
+              email: user?.primaryEmailAddress?.emailAddress,
+              validateTxs: true,
+            });
 
-          if (verificationResult.data.success) {
-            setCart([]);
-            toast("Order created successfully!");
-            router.replace("/dashboard");
-          } else {
-            toast.error("Payment verification failed.");
+            if (verificationResult.data.success) {
+              setCart([]);
+              toast("Order created successfully!");
+              router.replace("/dashboard");
+            } else {
+              toast.error("Payment verification failed.");
+            }
+          } catch (error) {
+            console.error("Error verifying payment:", error);
           }
         },
         modal: {

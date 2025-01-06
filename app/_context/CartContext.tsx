@@ -1,3 +1,5 @@
+"use client";
+
 import { ProductType } from "@/lib/types";
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
@@ -74,8 +76,8 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const response = await axios.delete(`/api/cart?recordId=${product?.id}`);
-      if (response.status !== 200) throw new Error("Failed to remove item");
       toast.success("Item removed from cart");
+      if (response.status !== 200) throw new Error("Failed to remove item");
     } catch (error) {
       console.error("Error removing item:", error);
       setCart(previousCart);
