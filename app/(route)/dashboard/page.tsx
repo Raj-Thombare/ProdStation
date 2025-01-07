@@ -2,6 +2,7 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserListing from "./_components/UserListing";
 import PurchaseHistory from "./_components/PurchaseHistory";
+import Analytics from "./_components/Analytics";
 
 type Props = {};
 
@@ -12,10 +13,14 @@ const Dashboard = (props: Props) => {
       <Tabs defaultValue='listing' className='mt-5'>
         <TabsList>
           <TabsTrigger value='listing'>Listing</TabsTrigger>
+          <TabsTrigger value='analytics'>Analytics</TabsTrigger>
           <TabsTrigger value='purchase'>Purchase</TabsTrigger>
         </TabsList>
         <TabsContent value='listing'>
           <UserListing />
+        </TabsContent>
+        <TabsContent value='analytics'>
+          <Analytics />
         </TabsContent>
         <TabsContent value='purchase'>
           <PurchaseHistory />

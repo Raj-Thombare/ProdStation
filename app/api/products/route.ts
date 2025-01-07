@@ -151,12 +151,7 @@ export async function DELETE(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const productId = searchParams.get('productId');
 
-    if (!productId) {
-
-    }
     const user = await currentUser();
-    console.log('user', user)
-    console.log('productId', productId)
 
     const result = await db.delete(productsTable)
         .where(and(eq(productsTable?.id, Number(productId!)), eq(productsTable.createdBy, user?.primaryEmailAddress?.emailAddress!)))

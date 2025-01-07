@@ -18,7 +18,6 @@ const ProductEditableOption = ({
 }) => {
   const deleteProductHandler = async () => {
     const result = await axios.delete("/api/products?productId=" + product?.id);
-    console.log(result);
     window.location.reload();
   };
 
@@ -29,9 +28,6 @@ const ProductEditableOption = ({
         <ul>
           <li className='flex gap-2 hover:bg-slate-100 p-2 rounded-md cursor-pointer'>
             <PenBox /> Edit
-          </li>
-          <li className='flex gap-2 hover:bg-slate-100 p-2 rounded-md cursor-pointer'>
-            <ChartLine /> Analytics
           </li>
           <li className='flex gap-2 hover:bg-slate-100 p-2 rounded-md cursor-pointer text-red-600'>
             <DeleteDialogConfirmation deleteProduct={deleteProductHandler}>

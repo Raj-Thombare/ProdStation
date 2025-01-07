@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const recordId = searchParams.get('recordId');
-    console.log("recordId: ", recordId)
+
     if (!recordId) {
         return NextResponse.json({ error: 'Id is required!' }, { status: 400 });
     }

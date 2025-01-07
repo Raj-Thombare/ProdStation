@@ -9,15 +9,17 @@ export interface ProductDetailsType {
     description: string;
     imageUrl: string;
     message: string;
-    user: User;
+    user: UserType;
     productId: number;
     email: any;
 }
 
-export interface User {
+export interface UserType {
+    id: number;
+    name: string;
+    email: string;
     image: string;
-    name: string
-}
+};
 
 export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user' | 'category' | 'productId' | 'email' | 'description'>
 
