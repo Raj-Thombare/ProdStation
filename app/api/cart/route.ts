@@ -45,13 +45,13 @@ export async function GET(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const recordId = searchParams.get('recordId');
-
+    console.log("recordId: ", recordId)
     if (!recordId) {
         return NextResponse.json({ error: 'Id is required!' }, { status: 400 });
     }
 
     try {
-        const deleteResult = await db.delete(cartTable).where(eq(cartTable.id, Number(recordId)));
+        const deleteResult = await db.delete(cartTable).where(eq(cartTable.productId, Number(recordId)!));
 
         if (deleteResult.rowCount === 0) {
             return NextResponse.json({ error: "Item not found!" }, { status: 404 });

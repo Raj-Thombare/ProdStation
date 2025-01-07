@@ -3,7 +3,8 @@ import { supabase } from "@/utils/supabase";
 import { db } from "@/config/db";
 import { productsTable, usersTable } from "@/config/schema";
 import { AddProductType } from "@/lib/types";
-import { desc, eq, getTableColumns } from "drizzle-orm";
+import { and, desc, eq, getTableColumns } from "drizzle-orm";
+import { currentUser } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
     const formData = await req.formData();
@@ -143,4 +144,22 @@ export async function GET(req: NextRequest) {
         .limit(Number(limit));
 
     return NextResponse.json({ result })
+}
+
+export async function DELETE(req: NextRequest) {
+
+    const { searchParams } = new URL(req.url);
+    const productId = searchParams.get('productId');
+
+    if (!productId) {
+
+    }
+    const user = await currentUser();
+    console.log('user', user)
+    console.log('productId', productId)
+
+    const result = await db.delete(productsTable)
+        .where(and(eq(productsTable?.id, Number(productId!)), eq(productsTable.createdBy, user?.primaryEmailAddress?.emailAddress!)))
+
+    return NextResponse.json({ result: "Deleted!!" })
 }

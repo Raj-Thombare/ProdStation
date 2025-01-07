@@ -19,6 +19,10 @@ type Props = {
 const ProductCardItem = ({ product, editable = false, purchase }: Props) => {
   const { addToCart } = useCart();
 
+  const handleEditableClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <Link href={`/explore/${product?.id}`}>
       <Card className='p-2 md:p-3 rounded-sm'>
@@ -62,9 +66,11 @@ const ProductCardItem = ({ product, editable = false, purchase }: Props) => {
                     Add to Cart
                   </Button>
                 ) : (
-                  <ProductEditableOption>
-                    <MoreVerticalIcon className='cursor-pointer' />
-                  </ProductEditableOption>
+                  <div onClick={handleEditableClick}>
+                    <ProductEditableOption product={product}>
+                      <MoreVerticalIcon className='cursor-pointer' />
+                    </ProductEditableOption>
+                  </div>
                 )}
               </>
             )}
