@@ -8,6 +8,8 @@ import ProductEditableOption from "./ProductEditableOption";
 import Link from "next/link";
 import { useCart } from "../_context/CartContext";
 import { formatCurrencyINR } from "@/utils";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 type Props = {
   product: ProductType;
@@ -17,10 +19,20 @@ type Props = {
 };
 
 const ProductCardItem = ({ product, editable = false, purchase }: Props) => {
+  const { isSignedIn } = useUser();
   const { addToCart } = useCart();
 
   const handleEditableClick = (e: React.MouseEvent) => {
     e.preventDefault();
+  };
+
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!isSignedIn) {
+      toast("Please Sign in!");
+    } else {
+      addToCart(product);
+    }
   };
 
   return (
@@ -56,13 +68,7 @@ const ProductCardItem = ({ product, editable = false, purchase }: Props) => {
                 </div>
 
                 {!editable ? (
-                  <Button
-                    size='sm'
-                    className='mt-2'
-                    onClick={(e) => {
-                      e.preventDefault();
-                      addToCart(product);
-                    }}>
+                  <Button size='sm' className='mt-2' onClick={handleAddToCart}>
                     Add to Cart
                   </Button>
                 ) : (

@@ -8,16 +8,19 @@ type Props = {};
 
 const PurchaseHistory = (props: Props) => {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getPurchaseHistory();
   }, []);
+
   const getPurchaseHistory = async () => {
+    setLoading(true);
     const result = await axios.get("/api/order");
     setProducts(result.data);
     setLoading(false);
   };
+  
   return (
     <div>
       <h2 className='font-bold text-3xl mt-5'>Purchase History</h2>

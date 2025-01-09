@@ -63,9 +63,9 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
         email: user?.primaryEmailAddress?.emailAddress,
       });
 
+      toast.success("Item added to cart");
       if (response.status === 200 || response.status === 201) {
         setCart(response.data);
-        toast.success("Item added to cart");
       } else {
         throw new Error("Failed to add item to cart");
       }

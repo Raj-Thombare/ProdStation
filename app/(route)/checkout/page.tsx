@@ -20,78 +20,78 @@ declare global {
   }
 }
 
-const page = () => {
+const CheckoutPage = () => {
   const { cart, setCart, totalAmount } = useCart();
   const { user } = useUser();
   const router = useRouter();
 
   const [isProcessing, setIsProcessing] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const createOrder = async () => {
-    const response = await axios.post("/api/order", { amount: totalAmount });
-    return response.data.orderId;
-  };
 
   const handlePayment = async () => {
-    setLoading(true);
     setIsProcessing(true);
 
     try {
-      const orderId = await createOrder();
-
+      const { data } = await axios.post("/api/order", { amount: totalAmount });
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: totalAmount * 100,
-        Currency: "INR",
+        currency: "INR",
         name: "ProdStation",
-        order_id: orderId,
-        handler: async function (response: any) {
+        order_id: data.orderId,
+        handler: async (response: any) => {
           try {
-            const verificationResult = await axios.post("/api/order", {
+            const { data: verifyResult } = await axios.post("/api/order", {
               paymentId: response.razorpay_payment_id,
               orderId: response.razorpay_order_id,
               signature: response.razorpay_signature,
-              orderDetail: cart,
+              orderDetail: cart.map((product) => ({
+                id: product.productId,
+                title: product.title,
+                price: product.price,
+                imageUrl: product.imageUrl,
+                description: product.description,
+              })),
               email: user?.primaryEmailAddress?.emailAddress,
               validateTxs: true,
+              amount: totalAmount,
             });
 
-            if (verificationResult.data.success) {
+            if (verifyResult.success) {
               setCart([]);
-              toast("Order created successfully!");
+              toast.success("Order created successfully!");
               router.replace("/dashboard");
             } else {
               toast.error("Payment verification failed.");
             }
           } catch (error) {
             console.error("Error verifying payment:", error);
+            toast.error("Error verifying payment.");
+          } finally {
+            setIsProcessing(false);
           }
         },
         modal: {
-          ondismiss: function () {
+          ondismiss: () => {
             toast("Payment canceled. Please try again.");
-            setLoading(false);
             setIsProcessing(false);
           },
         },
         prefill: {
-          name: user?.fullName,
+          name: user?.fullName || "User",
           email: user?.primaryEmailAddress?.emailAddress,
-          contact: "9999999999",
         },
         theme: {
           color: "#3399cc",
         },
       };
 
-      const rzp1 = new window.Razorpay(options);
-      rzp1.open();
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
+      console.error("Error creating Razorpay order:", error);
       toast.error("Error processing payment.");
+      setIsProcessing(false);
     }
-    setLoading(false);
-    setIsProcessing(false);
   };
 
   return (
@@ -109,12 +109,12 @@ const page = () => {
             <h2 className='font-bold text-2xl flex justify-between'>
               Total: <span>{formatCurrencyINR(totalAmount)}</span>
             </h2>
-            <hr className='my-5 border-black'></hr>
+            <hr className='my-5 border-black' />
             <p>Your payment receipt will be delivered to your email</p>
             <div>
-              Registered email id:
+              Registered email ID:
               {user && (
-                <Badge className='ms-2'>
+                <Badge className='ml-2'>
                   {user?.primaryEmailAddress?.emailAddress}
                 </Badge>
               )}
@@ -125,7 +125,7 @@ const page = () => {
               onClick={handlePayment}
               disabled={isProcessing}
               className='w-full'>
-              {loading ? (
+              {isProcessing ? (
                 <Loader2Icon className='animate-spin' />
               ) : (
                 "Create Order"
@@ -138,4 +138,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default CheckoutPage;

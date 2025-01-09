@@ -1,4 +1,4 @@
-export interface ProductDetailsType {
+export interface ProductType {
     id: number;
     title: string;
     price: number;
@@ -20,8 +20,6 @@ export interface UserType {
     email: string;
     image: string;
 };
-
-export type ProductType = Pick<ProductDetailsType, 'id' | 'title' | 'price' | 'imageUrl' | 'user' | 'category' | 'productId' | 'email' | 'description'>
 
 export interface AddProductType {
     title: string;

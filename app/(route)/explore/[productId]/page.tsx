@@ -4,7 +4,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { ProductDetailsType } from "@/lib/types";
+import { ProductType } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,13 +17,16 @@ import {
 import SimilarProducts from "./_components/SimilarProducts";
 import { formatCurrencyINR } from "@/utils";
 import { useCart } from "@/app/_context/CartContext";
+import { useUser } from "@clerk/nextjs";
+import { toast } from "sonner";
 
 type Props = {};
 
 const page = (props: Props) => {
   const { productId } = useParams();
-  const [product, setProduct] = useState<ProductDetailsType>();
+  const [product, setProduct] = useState<ProductType>();
   const { addToCart } = useCart();
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     getProductDetails();
@@ -32,6 +35,15 @@ const page = (props: Props) => {
   const getProductDetails = async () => {
     const result = await axios.get(`/api/products?id=${productId}`);
     setProduct(result.data);
+  };
+
+  const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (!isSignedIn) {
+      toast("Please Sign in!");
+    } else if (product) {
+      addToCart(product);
+    }
   };
 
   return (
@@ -62,10 +74,7 @@ const page = (props: Props) => {
               The {product.category} will send to your registered email address
               once you purchase this digital content
             </p>
-            <Button
-              className='w-full'
-              size='lg'
-              onClick={() => addToCart(product)}>
+            <Button className='w-full' size='lg' onClick={handleAddToCart}>
               Add to cart
             </Button>
             <div>
