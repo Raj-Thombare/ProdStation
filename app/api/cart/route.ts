@@ -7,12 +7,20 @@ export async function POST(req: NextRequest) {
 
     const { email, productId } = await req.json();
 
-    const result = await db.insert(cartTable).values({
-        email: email,
-        productId: productId
-    }).returning();
+    await db
+        .insert(cartTable)
+        .values({
+            productId,
+            email,
+        }).returning();
 
-    return NextResponse.json(result)
+    const result = await db.select({
+        ...getTableColumns(productsTable),
+        ...getTableColumns(cartTable)
+    }).from(cartTable).where(eq(cartTable.email, email))
+        .innerJoin(productsTable, eq(cartTable.productId, productsTable.id))
+
+    return NextResponse.json(result, { status: 201 });
 }
 
 export async function GET(req: NextRequest) {
@@ -51,7 +59,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     try {
-        const deleteResult = await db.delete(cartTable).where(eq(cartTable.productId, Number(recordId)!));
+        const deleteResult = await db.delete(cartTable).where(eq(cartTable.id, Number(recordId)));
 
         if (deleteResult.rowCount === 0) {
             return NextResponse.json({ error: "Item not found!" }, { status: 404 });

@@ -4,7 +4,7 @@ import DisplayProductList from "@/app/_components/DisplayProductList";
 import SortProducts from "@/app/_components/SortProducts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ProductDetailsType } from "@/lib/types";
+import { ProductType } from "@/lib/types";
 import axios from "axios";
 import { Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ interface SortType {
 }
 
 const page = () => {
-  const [productList, setProductList] = useState<ProductDetailsType[]>([]);
+  const [productList, setProductList] = useState<ProductType[]>([]);
   const [offset, setOffset] = useState<number>(0);
   const [searchInput, setSearchInput] = useState<string>("");
   const [sort, setSort] = useState<SortType>({

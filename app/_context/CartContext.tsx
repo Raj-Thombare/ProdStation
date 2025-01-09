@@ -36,7 +36,11 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<ProductType[]>([]);
 
   useEffect(() => {
-    user && getCartItems();
+    if (user) {
+      getCartItems();
+    } else {
+      setCart([]);
+    }
   }, [user]);
 
   const calculateTotalAmount = () => {
@@ -51,6 +55,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
     );
     setCart(result.data);
   };
+
   const addToCart = async (product: ProductType) => {
     try {
       const response = await axios.post(`/api/cart`, {
@@ -59,7 +64,7 @@ export const CartContextProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (response.status === 200 || response.status === 201) {
-        setCart((prevCart) => [...prevCart, product]);
+        setCart(response.data);
         toast.success("Item added to cart");
       } else {
         throw new Error("Failed to add item to cart");

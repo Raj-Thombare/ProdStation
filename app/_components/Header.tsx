@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { UserButton, SignedIn } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -36,7 +36,7 @@ const Header = () => {
         {MenuList.map((menu, idx) => {
           return (
             <Link href={`${menu.path}`} key={idx}>
-              <li key={idx} className='px-2 p-1 cursor-pointer hover:underline'>
+              <li className='px-2 p-1 cursor-pointer hover:underline'>
                 {menu?.name}
               </li>
             </Link>
@@ -53,12 +53,19 @@ const Header = () => {
             </Badge>
           </div>
         </CartList>
-        <Link href={"/dashboard"}>
+        <Link href='/dashboard'>
           <Button className='bg-red-500 hover:bg-red-600'>Start Selling</Button>
         </Link>
+
         <SignedIn>
           <UserButton />
         </SignedIn>
+
+        <SignedOut>
+          <Link href='/sign-in'>
+            <Button className=''>Sign In</Button>
+          </Link>
+        </SignedOut>
       </div>
     </div>
   );

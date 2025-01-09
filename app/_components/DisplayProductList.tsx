@@ -8,7 +8,7 @@ const DisplayProductList = ({
   purchase = false,
 }: {
   products: ProductType[];
-  purchase: boolean;
+  purchase?: boolean;
 }) => {
   return (
     <div className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 mt-5'>

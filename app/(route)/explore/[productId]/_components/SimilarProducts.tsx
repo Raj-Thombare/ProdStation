@@ -1,10 +1,10 @@
 import DisplayProductList from "@/app/_components/DisplayProductList";
-import { ProductDetailsType } from "@/lib/types";
+import { ProductType } from "@/lib/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const SimilarProducts = ({ category }: { category: string }) => {
-  const [products, setProducts] = useState<ProductDetailsType[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
 
   useEffect(() => {
     getSimilarProducts();
