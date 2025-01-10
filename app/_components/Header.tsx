@@ -29,7 +29,8 @@ const Header = () => {
     <div className='flex justify-between items-center p-4 px-10 md:px-32 lg:px-48 bg-primary border-b-2 border-black'>
       <Link href='/'>
         <h2 className='font-bold text-xl bg-black text-primary px-2 p-1 rounded-sm border'>
-          PRODSTATION
+          <span className='hidden md:inline'>PRODSTATION</span>
+          <span className='md:hidden'>PS</span>
         </h2>
       </Link>
       <ul className=' gap-5 hidden md:flex'>
@@ -54,7 +55,10 @@ const Header = () => {
           </div>
         </CartList>
         <Link href='/dashboard'>
-          <Button className='bg-red-500 hover:bg-red-600'>Start Selling</Button>
+          <Button className='bg-red-500 hover:bg-red-600'>
+            <span className='hidden md:inline'>Start Selling</span>
+            <span className='md:hidden'>Sell</span>
+          </Button>
         </Link>
 
         <SignedIn>
@@ -63,7 +67,7 @@ const Header = () => {
 
         <SignedOut>
           <Link href='/sign-in'>
-            <Button className=''>Sign In</Button>
+            <Button className='bg-green-600 hover:bg-green-500'>Sign In</Button>
           </Link>
         </SignedOut>
       </div>

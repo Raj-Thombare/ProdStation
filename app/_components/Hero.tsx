@@ -20,7 +20,7 @@ const Hero = () => {
               <Button size='lg'>Explore</Button>
             </Link>
             <Link href={"/dashboard"}>
-              <Button size='lg' className='bg-red-500'>
+              <Button size='lg' className='bg-red-500 hover:bg-red-600'>
                 Sell
               </Button>
             </Link>

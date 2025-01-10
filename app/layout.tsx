@@ -6,7 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "ProdStation",
+  title: "Prodstation",
   description: "Marketplace to buy products",
 };
 

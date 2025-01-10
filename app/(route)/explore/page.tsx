@@ -64,11 +64,11 @@ const page = () => {
     <div className='mt-10'>
       <h2 className='font-bold text-2xl'>Explore</h2>
 
-      <div className='mt-5 mb-5 flex justify-between items-center'>
-        <div className='flex gap-2 items-center'>
+      <div className='mt-5 mb-5 flex flex-col md:flex-row justify-between items-center gap-y-2'>
+        <div className='flex gap-2 items-center w-full'>
           <Input
             placeholder='Search'
-            className='w-80'
+            className='min-w-auto max-w-80 md:max-w-80'
             onChange={(e) => setSearchInput(e.target.value)}
           />
           <Button
@@ -77,7 +77,7 @@ const page = () => {
               setProductList([]);
             }}>
             <Search />
-            Search
+            <p className='hidden md:inline'>Search</p>
           </Button>
         </div>
         <SortProducts onSortChange={(value) => setSort(JSON.parse(value))} />

@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SlidersHorizontal } from "lucide-react";
 
 type Props = {
   onSortChange: (value: string) => void;
@@ -36,11 +37,12 @@ const SortProducts = ({ onSortChange }: Props) => {
   ];
 
   return (
-    <div>
+    <div className='w-full flex justify-end'>
       <Select onValueChange={(value) => onSortChange(value)}>
         <SelectTrigger className='w-[180px]'>
           <SelectValue placeholder='Sort' />
         </SelectTrigger>
+
         <SelectContent>
           {list.map((option, idx) => {
             return (
