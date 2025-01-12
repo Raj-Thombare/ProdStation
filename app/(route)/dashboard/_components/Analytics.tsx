@@ -58,7 +58,7 @@ const Analytics = () => {
             {orderList.map((item) => (
               <Card
                 key={item.orders.id}
-                className='p-5 mb-3 flex items-start space-x-4'>
+                className='p-5 mb-3 flex items-center md:items-start space-x-4 flex-col md:flex-row'>
                 <div className='flex-1 flex justify-center items-center'>
                   <Image
                     src={item.products.imageUrl}
@@ -69,18 +69,22 @@ const Analytics = () => {
                   />
                 </div>
 
-                <div className='flex-1'>
-                  <h2 className='font-bold text-xl'>{item.products.title}</h2>
-                  <Badge>{item.products.category}</Badge>
+                <div className='flex-1 mb-4 md:mb-0'>
+                  <h2 className='font-bold text-xl pb-4'>
+                    {item.products.title}
+                  </h2>
+                  <div className='flex justify-center md:justify-start'>
+                    <Badge>{item.products.category}</Badge>
+                  </div>
                 </div>
 
-                <div className='flex-1 text-center'>
+                <div className='flex-1 text-center mb-4 md:mb-0'>
                   <p className='text-xl font-bold'>
                     {formatCurrencyINR(item.products.price)}
                   </p>
                 </div>
 
-                <div className='flex-1 text-right'>
+                <div className='flex-1 text-center md:text-right'>
                   <p className='font-bold'>{item.users.name}</p>
                   <p>({item.users.email})</p>
                 </div>

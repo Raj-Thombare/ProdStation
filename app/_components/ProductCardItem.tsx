@@ -72,7 +72,9 @@ const ProductCardItem = ({ product, editable = false, purchase }: Props) => {
                     Add to Cart
                   </Button>
                 ) : (
-                  <div onClick={handleEditableClick}>
+                  <div
+                    onClick={handleEditableClick}
+                    className='flex justify-end'>
                     <ProductEditableOption product={product}>
                       <MoreVerticalIcon className='cursor-pointer' />
                     </ProductEditableOption>

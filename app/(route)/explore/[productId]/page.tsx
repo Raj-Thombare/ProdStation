@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { ProductType } from "@/lib/types";
@@ -19,6 +19,7 @@ import { formatCurrencyINR } from "@/utils";
 import { useCart } from "@/app/_context/CartContext";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "sonner";
+import { MoveLeft } from "lucide-react";
 
 type Props = {};
 
@@ -27,6 +28,7 @@ const page = (props: Props) => {
   const [product, setProduct] = useState<ProductType>();
   const { addToCart } = useCart();
   const { isSignedIn } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     getProductDetails();
@@ -49,7 +51,12 @@ const page = (props: Props) => {
   return (
     product && (
       <div className='mt-10'>
-        <h2 className='cursor-pointer'>BACK</h2>
+        <h2 className='cursor-pointer'>
+          <Button onClick={() => router.back()} className='bg-slate-100'>
+            BACK
+            <MoveLeft />
+          </Button>
+        </h2>
         <div className='grid grid-cols-1 md:grid-cols-2 mt-6 gap-10'>
           <Card className='flex items-center justify-center max-h-[402px] h-[402px] overflow-hidden'>
             <Image
